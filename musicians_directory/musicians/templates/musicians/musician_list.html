@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document/title>
+</head>
+<body>
+    <h1>Musician Directory</h1>
+    <a href="{% url 'musician_create' %}">Add Musician</a>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Musician Name</th>
+                <th>Email</th>
+                <th>Album Rating</th>
+                <th>Instrument Type</th>
+                <th>Album Name</th>
+                <th>Release Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for musician in musicians %}
+                {% for album in musician.albums.all %}
+                <tr>
+                    <td>{{ musician.id }}</td>
+                    <td><a href="{% url 'musician_edit' musician.id %}">{{ musician.first_name }} {{ musician.last_name }}</a></td>
+                    <td>{{ musician.email }}</td>
+                    <td>{{ album.rating }}</td>
+                    <td>{{ musician.instrument_type }}</td>
+                    <td><a href="{% url 'album_edit' album.id %}">{{ album.album_name }}</a></td>
+                    <td>{{ album.release_date|date:"d-M-Y" }}</td>
+                    <td>
+                        <a href="{% url 'album_edit' album.id %}">Edit</a>
+                        <a href="{% url 'album_delete' album.id %}">Delete</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8">No albums found for this musician.</td>
+                </tr>
+                {% endfor %}
+            {% empty %}
+                <tr>
+                    <td colspan="8">No musicians found.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
